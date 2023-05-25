@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import blank from '../../assets/home/blank-profile-picture-gb085c28e0_1280.png'
+import { BiListMinus } from "react-icons/bi";
 
 const Nav = () => {
     const ulItem = <>
@@ -26,8 +28,19 @@ const Nav = () => {
                         {ulItem}
                     </ul>
                 </div>
-                <div className="navbar-end">
-                    <a className="btn">Get started</a>
+                <div className="navbar-end ">
+                    <div className='flex gap-3 border items-center  rounded-full p-1'>
+                        {/* <Link to="/sign_in"><button className="btn btn-outline btn-warning">Log In</button></Link> */}
+                        <div className="dropdown dropdown-bottom dropdown-end">
+                        <BiListMinus tabIndex={0}  className='text-2xl'></BiListMinus>
+                            {/* <label className="btn m-1">Click</label> */}
+                            <ul tabIndex={0} className="dropdown-content menu p-4 shadow bg-black bg-opacity-80 rounded-box w-52">
+                                <Link to="/sign_in"><li>Log In</li></Link>
+                                <li className='mt-3'>Log Out</li>
+                            </ul>
+                        </div>
+                        <img src={blank} className='h-7 w-7 rounded-full' alt="" />
+                    </div>
                 </div>
             </div>
         </div>

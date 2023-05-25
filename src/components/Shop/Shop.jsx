@@ -3,21 +3,22 @@ import { useTitle } from '../useCustom/useCustom';
 import banner from '../../assets/shop/banner2.jpg'
 import { useLoaderData, useParams } from 'react-router-dom';
 import FoodCart from './FoodCart';
+import { BarLoader } from 'react-spinners';
 
 const Shop = () => {
     useTitle('Shop')
     const item = useParams().text
-    const useData = useLoaderData()
+    const [tf, setTf] = useState(false)
     const [data, setData] = useState([])
     const [text, setText] = useState(item)
     useEffect(() => {
-        {
-            const newData = useData.filter(d => d.category === text)
-            setData(newData)
-
-        }
+        setTf(false)
+        fetch(`http://localhost:5000/category/${text}`)
+            .then(res => res.json()).then(data => {
+                setTf(true)
+                setData(data)
+            })
     }, [text])
-    console.log(data);
     return (
         <div>
             <div style={{ backgroundImage: `url('${banner}')` }} className='bg-center md:px-28 bg-cover bg-no-repeat text-center py-44'>
@@ -32,9 +33,10 @@ const Shop = () => {
                 <h3 onClick={() => setText('dessert')} className={`font-semibold cursor-pointer text-base ${text === 'dessert' ? 'text-orange-500 border-b-2 pb-1 border-orange-500' : ''}`}>dessert</h3>
                 <h3 onClick={() => setText('soup')} className={`font-semibold cursor-pointer text-base ${text === 'soup' ? 'text-orange-500 border-b-2 pb-1 border-orange-500' : ''}`}>soup</h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4"> 
-                {data.map(d => <FoodCart key={d._id} d={d} ></FoodCart>)}
-            </div>
+            {!tf ? <div className="text-center flex justify-center"><BarLoader color="#36d7b7" /></div>
+                : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+                    {data.map(d => <FoodCart key={d._id} d={d} ></FoodCart>)}
+                </div>}
         </div>
     );
 };

@@ -10,7 +10,7 @@ const FoodCart = ({ d }) => {
                 <div className='text-center'>
                     <h2 className=" text-lg font-bold">{name}</h2>
                     <p className='my-4'>{recipe}</p>
-                    <button className="btn sticky top-full w-6/12">Add Cart</button>
+                    <button className="btn  sticky bg-slate-300 text-black border-0 border-b-2 top-full w-6/12">Add Cart</button>
                 </div>
             </div>
         </div>

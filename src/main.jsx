@@ -6,6 +6,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './components/Home/Home.jsx'
 import MenuPage from './components/MenuPage/MenuPage.jsx'
 import Shop from './components/Shop/Shop.jsx'
+import SignIn from './components/Account/SignIn.jsx'
+import SignUp from './components/Account/SignUp.jsx'
 
 
 const router = createBrowserRouter([
@@ -20,15 +22,22 @@ const router = createBrowserRouter([
       {
         path: '/menu',
         element: <MenuPage></MenuPage>,
-        loader: () => fetch('/menu.json')
+        loader: () => fetch('http://localhost:5000/items')
       },
       {
         path: '/shop/:text',
-        element: <Shop></Shop>,
-        loader: () => fetch('/menu.json')
+        element: <Shop></Shop>
       },
     ]
-  }
+  },
+  {
+    path: '/sign_in',
+    element: <SignIn></SignIn>
+  },
+  {
+    path: '/sign_up',
+    element: <SignUp></SignUp>
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
