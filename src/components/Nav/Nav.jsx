@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import blank from '../../assets/home/blank-profile-picture-gb085c28e0_1280.png'
 import { BiListMinus } from "react-icons/bi";
+import { AuthContex } from '../AuthProvider/AuthProvider';
 
 const Nav = () => {
+    const { user, out } = useContext(AuthContex)
     const ulItem = <>
         <li><Link to="/" className='font-medium'>Home</Link></li>
         <li><Link to="/menu" className='font-medium'>Menu</Link></li>
         <li><Link to={`/shop/salad`} className='font-medium'>Shop</Link></li>
     </>
+    const getOut = () => {
+        out()
+    }
     return (
         <div className=''>
             <div className="navbar bg-black max-w-screen-xl mx-auto bg-opacity-25 text-white fixed top-0 z-10">
@@ -32,14 +37,14 @@ const Nav = () => {
                     <div className='flex gap-3 border items-center  rounded-full p-1'>
                         {/* <Link to="/sign_in"><button className="btn btn-outline btn-warning">Log In</button></Link> */}
                         <div className="dropdown dropdown-bottom dropdown-end">
-                        <BiListMinus tabIndex={0}  className='text-2xl'></BiListMinus>
+                            <BiListMinus tabIndex={0} className='text-2xl cursor-pointer'></BiListMinus>
                             {/* <label className="btn m-1">Click</label> */}
                             <ul tabIndex={0} className="dropdown-content menu p-4 shadow bg-black bg-opacity-80 rounded-box w-52">
-                                <Link to="/sign_in"><li>Log In</li></Link>
-                                <li className='mt-3'>Log Out</li>
+                                {!user && <Link to="/sign_in"><li>Log In</li></Link>}
+                                {user && <li className='mt-3 cursor-pointer' onClick={getOut}>Log Out</li>}
                             </ul>
                         </div>
-                        <img src={blank} className='h-7 w-7 rounded-full' alt="" />
+                        <img src={user?.photoURL || blank} className='h-7 w-7 rounded-full' alt="" />
                     </div>
                 </div>
             </div>
