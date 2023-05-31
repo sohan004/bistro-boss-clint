@@ -3,13 +3,21 @@ import { Link } from 'react-router-dom';
 import blank from '../../assets/home/blank-profile-picture-gb085c28e0_1280.png'
 import { BiListMinus } from "react-icons/bi";
 import { AuthContex } from '../AuthProvider/AuthProvider';
+import Badge from '@mui/material/Badge';
+import { useCarts } from '../useCustom/useCarts';
 
 const Nav = () => {
     const { user, out } = useContext(AuthContex)
+    const { data } = useCarts()
     const ulItem = <>
         <li><Link to="/" className='font-medium'>Home</Link></li>
         <li><Link to="/menu" className='font-medium'>Menu</Link></li>
         <li><Link to={`/shop/salad`} className='font-medium'>Shop</Link></li>
+        <div className='relative'>
+            <li><Link to='/dashboard/carts' className='font-medium'>carts</Link></li>
+            <p className='bg-red-500 absolute text-white px-2 top-0 right-0 rounded-full'>{data.length}</p>
+        </div>
+        <li><Link to="/dashboard/user_home" className='font-medium'>Dashboard</Link></li>
     </>
     const getOut = () => {
         out()

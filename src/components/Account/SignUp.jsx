@@ -32,22 +32,35 @@ const SignUp = () => {
                     .then(result => {
                         setEror('')
                         updt(result.user, data.name, image.data.display_url)
-                            .then().catch(err => {
+                            .then(updpUser => {
+                                const userInfo = { name: result.user.displayName, email: result.user.email, role: 'user' }
+                                fetch('http://localhost:5000/users', {
+                                    method: 'POST',
+                                    headers: { 'content-type': 'application/json' },
+                                    body: JSON.stringify(userInfo)
+                                })
+                                    .then(res => res.json())
+                                    .then(u => {
+                                        if (u.insertedId) {
+                                            varify(result.user)
+                                                .then(() => {
+                                                    out().then(() => {
+                                                        setLoading(true)
+                                                        Swal.fire(
+                                                            'Register Successfully',
+                                                            'go to your email box and verify your account',
+                                                            'success'
+                                                        )
+                                                        navigate('/sign_in')
+                                                    })
+                                                })
+                                        }
+                                    })
+                            }).catch(err => {
                                 setEror(err.message)
                                 setLoading(true)
                             })
-                        varify(result.user)
-                            .then(() => {
-                                out().then(() => {
-                                    setLoading(true)
-                                    Swal.fire(
-                                        'Register Successfully',
-                                        'go to your email box and verify your account',
-                                        'success'
-                                    )
-                                    navigate('/sign_in')
-                                })
-                            })
+
                     })
                     .catch(err => {
                         setEror(err.message)

@@ -24,11 +24,20 @@ const AuthProvider = ({ children }) => {
     }
     const out = (email, pass) => {
         setLoad(true)
+        localStorage.removeItem('user-token')
         return signOut(auth)
     }
     const varify = u => {
         setLoad(true)
         return sendEmailVerification(u)
+    }
+    const jwt = u => {
+        // setLoad(true)
+        const userInfo = { name: u.displayName, email: u.email }
+        return fetch('http://localhost:5000/jwt', {
+            method: 'POST',
+            body: JSON.stringify(userInfo)
+        })
     }
     const updt = (u, n, i) => {
         setLoad(true)
@@ -54,7 +63,8 @@ const AuthProvider = ({ children }) => {
         out,
         google,
         updt,
-        varify
+        varify,
+        jwt
     }
     return (
         <AuthContex.Provider value={info}>

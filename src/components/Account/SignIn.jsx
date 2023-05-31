@@ -11,7 +11,7 @@ import { GridLoader } from 'react-spinners';
 const SignIn = () => {
     const loc = useLocation()
     const navigate = useNavigate()
-    const { google, signIn } = useContext(AuthContex)
+    const { google, signIn, jwt } = useContext(AuthContex)
     const [eror, setEror] = useState('')
     const [loading, setLoading] = useState(true)
     useTitle('Sign In')
@@ -21,9 +21,16 @@ const SignIn = () => {
         setLoading(false)
         signIn(inputData.email, inputData.pass)
             .then(result => {
-                setEror('')
-                navigate(loc?.state ? loc.state : '/')
-                setLoading(true)
+
+                jwt(result.user)
+                    .then(res => res.json())
+                    .then(token => {
+                        setEror('')
+                        navigate(loc?.state ? loc.state : '/')
+                        setLoading(true)
+                        localStorage.setItem('user-token', token.token)
+
+                    })
 
             })
             .catch(err => {
@@ -36,8 +43,21 @@ const SignIn = () => {
         google()
             .then(result => {
                 setEror('')
-                navigate(loc?.state ? loc.state : '/')
-                setLoading(true)
+                jwt(result.user)
+                    .then(res => res.json())
+                    .then(token => localStorage.setItem('user-token', token.token))
+                const userInfo = { name: result.user.displayName, email: result.user.email, role: 'user' }
+                fetch('http://localhost:5000/users', {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify(userInfo)
+                })
+                    .then(res => res.json())
+                    .then(u => {
+                        navigate(loc?.state ? loc.state : '/')
+                        setLoading(true)
+                    })
+
             })
             .catch(err => {
                 setEror(err.message)
